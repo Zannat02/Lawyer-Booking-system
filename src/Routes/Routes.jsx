@@ -22,21 +22,21 @@ export  const router = createBrowserRouter([
             Component:Home
         },
         {
-          path:'/bookings',
+          path:'bookings',
           Component:MyBookings
         },
         {
-          path: '/LawyerDetails/:id',
+          path: 'LawyerDetails/:id',
           loader:()=>fetch('LawyersData.json'),
           Component:LawyerDetails
         },
         {
-          path:'/blogs',
+          path:'blogs',
           loader:()=>fetch('BlogData.json'),
           Component:Blogs
         },
          {
-          path:'/contact',
+          path:'contact',
           Component:ErrorPage
         }
         
