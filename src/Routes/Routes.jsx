@@ -27,12 +27,12 @@ export  const router = createBrowserRouter([
         },
         {
           path: '/LawyerDetails/:id',
-          loader:()=>fetch('/LawyersData.json'),
+          loader:()=>fetch('LawyersData.json'),
           Component:LawyerDetails
         },
         {
           path:'/blogs',
-          loader:()=>fetch('/BlogData.json'),
+          loader:()=>fetch('BlogData.json'),
           Component:Blogs
         },
          {
