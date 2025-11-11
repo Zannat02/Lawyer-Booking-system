@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "question": "What is useState and how does it work in React?",
+    "answer": "useState is a React hook that lets you add state to functional components. It returns an array with two elements: the current state value and a function to update it. When the state is updated, the component re-renders with the new state.",
+    "category": "React Hooks",
+    "dateAdded": "2025-11-10"
+  },
+  {
+    "id": 2,
+    "question": "What is the purpose of useEffect in React?",
+    "answer": "useEffect is a hook that lets you perform side effects in functional components. It can be used for tasks like fetching data, subscribing to events, or updating the DOM. You can control when it runs by specifying dependencies in an array.",
+    "category": "React Hooks",
+    "dateAdded": "2025-11-10"
+  },
+  {
+    "id": 3,
+    "question": "What is a custom hook in React and when should you use one?",
+    "answer": "A custom hook is a JavaScript function whose name starts with 'use' and that can call other hooks. You use custom hooks to extract and reuse stateful logic across multiple components, improving code maintainability.",
+    "category": "React Hooks",
+    "dateAdded": "2025-11-10"
+  },
+  {
+    "id": 4,
+    "question": "Difference between controlled and uncontrolled components. Which one is better?",
+    "answer": "Controlled components are form elements whose values are managed by React state, whereas uncontrolled components store their own internal state (using refs). Controlled components are generally better for complex forms because they provide better control and validation.",
+    "category": "React Forms",
+    "dateAdded": "2025-11-10"
+  },
+  {
+    "id": 5,
+    "question": "Tell us something about useFormStatus() in React.",
+    "answer": "useFormStatus() is a React hook used in forms (for example in React Router or React Hook Form) to track the current status of a form, such as whether it is submitting, validating, or idle. This allows you to disable inputs or show loading indicators.",
+    "category": "React Forms",
+    "dateAdded": "2025-11-10"
+  }
+]
