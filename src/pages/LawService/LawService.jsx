@@ -14,7 +14,7 @@ const LawService = () => {
 
             <p className='text-gray-400 text-center mt-3'>Our platform connects you with verified, experienced Lawyers across various specialities — all at your convenience. </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mt-10 px-5 md:px-20">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-10 px-5 md:px-20">
 
                 {/* Card 1 */}
                 <div className=" max-w-sm  border border-gray-300 rounded-2xl bg-gray-200 ">
