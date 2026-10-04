@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLoaderData, useNavigate, useParams, useLocation } from 'react-router';
 import { CiWarning } from "react-icons/ci";
+import { LuCalendarDays, LuClock } from "react-icons/lu";
 
 import { toast } from "react-toastify";
 import useAuth from '../../hooks/useAuth';
+
+const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const TIME_SLOTS = ['10:00 AM', '11:00 AM', '12:00 PM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM'];
 
 const LawyerDetails = () => {
 
@@ -15,6 +19,9 @@ const LawyerDetails = () => {
   const location = useLocation();
   const { user } = useAuth();
 
+  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedTime, setSelectedTime] = useState('');
+
   const singleLawyer = data.find(lawyer => lawyer.id === parseInt(id));
 
   if (!singleLawyer) {
@@ -22,6 +29,23 @@ const LawyerDetails = () => {
   }
 
   const { name, experience, licenseNumber, availability, consultationFee, speciality, image, available } = singleLawyer;
+
+  const todayStr = new Date().toISOString().split('T')[0];
+
+  const handleDateChange = (e) => {
+    const value = e.target.value;
+    if (!value) {
+      setSelectedDate('');
+      return;
+    }
+    const weekday = DAY_NAMES[new Date(value).getDay()];
+    if (availability && availability.length > 0 && !availability.includes(weekday)) {
+      toast.warning(`This lawyer is not available on ${weekday}. Available days: ${availability.join(', ')}`);
+      setSelectedDate('');
+      return;
+    }
+    setSelectedDate(value);
+  };
 
   const handleBookAppointment = () => {
 
@@ -31,11 +55,18 @@ const LawyerDetails = () => {
       return;
     }
 
+    if (!selectedDate || !selectedTime) {
+      toast.warning("Please select a date and time for your appointment!");
+      return;
+    }
+
     const appointment = {
       name,
       speciality,
       consultationFee,
       id: singleLawyer.id,
+      date: selectedDate,
+      time: selectedTime,
     };
 
     const storageKey = `appointments_${user.uid}`;
@@ -125,6 +156,46 @@ const LawyerDetails = () => {
             Lawyer  Available Today
           </button>
 
+        </div>
+
+        <div className='border border-dashed border-gray-300'></div>
+
+        {/* Date & Time Picker */}
+        <div className="m-3 md:m-5 space-y-4">
+          <div>
+            <label className="flex items-center gap-1.5 font-semibold text-xs md:text-sm mb-2">
+              <LuCalendarDays size={16} /> Select a date
+            </label>
+            <input
+              type="date"
+              min={todayStr}
+              value={selectedDate}
+              onChange={handleDateChange}
+              className="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-green-700"
+            />
+            <p className="text-gray-400 text-xs mt-1">Available on: {availability?.join(', ') || 'Not specified'}</p>
+          </div>
+
+          <div>
+            <label className="flex items-center gap-1.5 font-semibold text-xs md:text-sm mb-2">
+              <LuClock size={16} /> Select a time
+            </label>
+            <div className="flex flex-wrap gap-2">
+              {TIME_SLOTS.map((slot) => (
+                <button
+                  key={slot}
+                  type="button"
+                  onClick={() => setSelectedTime(slot)}
+                  className={`px-3 py-1.5 rounded-full text-xs md:text-sm border transition ${selectedTime === slot
+                      ? 'bg-green-700 text-white border-green-700'
+                      : 'bg-white text-gray-600 border-gray-300 hover:border-green-700'
+                    }`}
+                >
+                  {slot}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
         <div className='border border-dashed border-gray-300'></div>

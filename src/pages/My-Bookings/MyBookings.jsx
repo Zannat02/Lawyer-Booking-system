@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, LabelList, ResponsiveContainer } from "recharts";
 import useAuth from "../../hooks/useAuth";
+import { LuCalendarDays, LuClock } from "react-icons/lu";
 
 const colors = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', 'red', 'pink'];
 
@@ -81,6 +82,20 @@ const MyBookings = () => {
                                     <div>
                                         <h2 className="font-bold text-base md:text-lg">{item.name}</h2>
                                         <p className="text-gray-500 text-sm">{item.speciality}</p>
+                                        {(item.date || item.time) && (
+                                            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 mt-2">
+                                                {item.date && (
+                                                    <span className="flex items-center gap-1 text-xs text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full">
+                                                        <LuCalendarDays size={13} /> {item.date}
+                                                    </span>
+                                                )}
+                                                {item.time && (
+                                                    <span className="flex items-center gap-1 text-xs text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full">
+                                                        <LuClock size={13} /> {item.time}
+                                                    </span>
+                                                )}
+                                            </div>
+                                        )}
                                     </div>
                                     <div>
                                         <p className="text-gray-400 font-semibold text-sm md:text-base">Appointment Fee: {item.consultationFee} Taka</p>
