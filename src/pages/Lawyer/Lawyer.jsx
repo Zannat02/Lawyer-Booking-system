@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { FaArrowRight } from "react-icons/fa6";
+import { FaArrowRight, FaStar } from "react-icons/fa6";
 import { HiOutlineBriefcase } from "react-icons/hi2";
 import { PiSealCheckFill } from "react-icons/pi";
 
-const Lawyer = ({ lawyer }) => {
+const Lawyer = ({ lawyer, ratingInfo }) => {
   const { name, image, experience, speciality, licenseNumber, id, available } =
     lawyer;
 
@@ -57,6 +57,14 @@ const Lawyer = ({ lawyer }) => {
               {name}
               <PiSealCheckFill className="text-sky-500 shrink-0" size={16} title="Verified" />
             </h2>
+
+            {ratingInfo && (
+              <span className="flex items-center gap-1 bg-amber-50 text-amber-600 text-xs font-semibold px-2 py-1 rounded-full shrink-0">
+                <FaStar size={11} />
+                {ratingInfo.average}
+                <span className="text-amber-400 font-normal">({ratingInfo.count})</span>
+              </span>
+            )}
           </div>
 
           <p className="text-green-700 text-xs md:text-sm font-medium mt-0.5">{speciality}</p>
@@ -66,7 +74,7 @@ const Lawyer = ({ lawyer }) => {
             <span>{experience}+ years experience</span>
           </div>
 
-          <p className="text-gray-400 text-xs mt-1 mb-1">License No: {licenseNumber}</p>
+          <p className="text-gray-400 text-xs mt-1 mb-2">License No: {licenseNumber}</p>
 
           <button
             onClick={handleViewDetails}

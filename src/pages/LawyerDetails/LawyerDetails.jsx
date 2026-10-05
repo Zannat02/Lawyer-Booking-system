@@ -5,6 +5,7 @@ import { LuCalendarDays, LuClock } from "react-icons/lu";
 
 import { toast } from "react-toastify";
 import useAuth from '../../hooks/useAuth';
+import ReviewsSection from '../../components/Reviews/ReviewsSection';
 
 const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const TIME_SLOTS = ['10:00 AM', '11:00 AM', '12:00 PM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM'];
@@ -205,6 +206,9 @@ const LawyerDetails = () => {
         <button onClick={handleBookAppointment} className='bg-green-700 text-white  rounded-2xl p-3  w-full text-sm md:text-base'>Book Appointment Now</button>
 
       </div>
+
+      <ReviewsSection lawyerId={singleLawyer.id} lawyerName={name} />
+
     </div>
   );
 };

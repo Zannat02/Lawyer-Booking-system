@@ -1,4 +1,6 @@
-import React, { Suspense, useMemo, useState } from 'react';
+import React, { Suspense, useEffect, useMemo, useState } from 'react';
+import { collection, onSnapshot } from 'firebase/firestore';
+import { db } from '../../firebase/firebase.config';
 import Lawyer from '../Lawyer/Lawyer';
 import { CiSearch } from "react-icons/ci";
 
@@ -8,6 +10,40 @@ const Lawyers = ({ data }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedSpeciality, setSelectedSpeciality] = useState('All');
     const [sortBy, setSortBy] = useState('default');
+    const [reviews, setReviews] = useState([]);
+
+    // Ekta-i listener: shob review ekbar ane
+    useEffect(() => {
+        const unsubscribe = onSnapshot(
+            collection(db, 'reviews'),
+            (snapshot) => {
+                setReviews(snapshot.docs.map(d => d.data()));
+            },
+            (error) => {
+                console.error('Reviews load error:', error);
+            }
+        );
+        return () => unsubscribe();
+    }, []);
+
+    // lawyerId onujayi average + count
+    const ratingMap = useMemo(() => {
+        const map = {};
+        reviews.forEach(({ lawyerId, rating }) => {
+            if (!map[lawyerId]) map[lawyerId] = { sum: 0, count: 0 };
+            map[lawyerId].sum += rating;
+            map[lawyerId].count += 1;
+        });
+
+        const result = {};
+        Object.keys(map).forEach((id) => {
+            result[id] = {
+                average: (map[id].sum / map[id].count).toFixed(1),
+                count: map[id].count,
+            };
+        });
+        return result;
+    }, [reviews]);
 
     const specialities = useMemo(() => {
         const unique = [...new Set(data.map(l => l.speciality))];
@@ -88,7 +124,13 @@ const Lawyers = ({ data }) => {
                 <Suspense fallback={<span>Loading...</span>}>
                     <div className='grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 mt-8 md:mt-10'>
                         {
-                            visibleLawyers.map(lawyer => <Lawyer key={lawyer.id} lawyer={lawyer}></Lawyer>)
+                            visibleLawyers.map(lawyer => (
+                                <Lawyer
+                                    key={lawyer.id}
+                                    lawyer={lawyer}
+                                    ratingInfo={ratingMap[lawyer.id]}
+                                ></Lawyer>
+                            ))
                         }
                     </div>
                 </Suspense>
