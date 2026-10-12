@@ -6,6 +6,12 @@ import { LuCalendarDays, LuClock } from "react-icons/lu";
 import { toast } from "react-toastify";
 import useAuth from '../../hooks/useAuth';
 import ReviewsSection from '../../components/Reviews/ReviewsSection';
+import emailjs from '@emailjs/browser';
+
+// EmailJS config (public key is designed to be public, safe in frontend code)
+const EMAILJS_SERVICE_ID = 'service_o9u4sbw';
+const EMAILJS_TEMPLATE_ID = 'template_fxdifbc';
+const EMAILJS_PUBLIC_KEY = 'yjp_9c7kChpVEmZR5';
 
 const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const TIME_SLOTS = ['10:00 AM', '11:00 AM', '12:00 PM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM'];
@@ -83,6 +89,30 @@ const LawyerDetails = () => {
 
     existing.push(appointment);
     localStorage.setItem(storageKey, JSON.stringify(existing));
+
+    // Send confirmation email (booking is already saved, so a failure here won't undo it)
+    emailjs
+      .send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        {
+          to_name: user.displayName || user.email,
+          to_email: user.email,
+          lawyer_name: name,
+          speciality,
+          date: selectedDate,
+          time: selectedTime,
+          fee: consultationFee,
+        },
+        EMAILJS_PUBLIC_KEY
+      )
+      .then(() => {
+        toast.info("Confirmation email sent to " + user.email);
+      })
+      .catch((err) => {
+        console.error('EmailJS error:', err);
+        toast.warning("Booked, but we couldn't send the confirmation email.");
+      });
 
     toast.success("Appointment booked successfully!");
     navigate("/bookings");
